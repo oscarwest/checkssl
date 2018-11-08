@@ -292,7 +292,7 @@ fi
 LIST_OF_DOMAINS=$(mktemp)
 DATA_OUT=$(mktemp)
 debug "created tmp files for input (${LIST_OF_DOMAINS}) and output (${DATA_OUT})"
-echo "Domain|port|cert issued for|valid until|cert issued by|  possible issues?" > "$DATA_OUT"
+#echo "Domain|port|cert issued for|valid until|cert issued by|  possible issues?" > "$DATA_OUT"
 
 # use name name from command line if specified
 if [ $DOMAINARG ]; then
@@ -339,6 +339,7 @@ fi
 
 debug "completed creating list of domains"
 
+printf '['
 # read domains from file 
 while IFS= read -r LINE; do
   if [ ! -z "$LINE" ]; then
@@ -416,9 +417,13 @@ while IFS= read -r LINE; do
         fi
       fi
     fi
-    printf "%s|%s|%s|%s|%s|%s\n" "$DOMAIN" "$PS" "$ISSUEDTO" "$ENDDATE" "$ISSUER" "$PROBLEMS">> "$DATA_OUT"
+    #printf '%s|%s|%s|"%s"|%s|%s\n' "$DOMAIN" "$PS" "$ISSUEDTO" "$ENDDATE" "$ISSUER" "$PROBLEMS">> "$DATA_OUT"
+
+    JSON_FMT='{"domain":"%s","end_date":"%s"},\n'
+    printf "$JSON_FMT" "$DOMAIN" "$ENDDATE"
   fi
 done < "$LIST_OF_DOMAINS"
+
 
 if [[ $RENEWARG ]]; then
   grep "certificate near renewal date" "$DATA_OUT" | awk -F"|" '{print $1}'
@@ -437,4 +442,5 @@ else
   column -t -s"|" < "$DATA_OUT"
 fi
 
+printf ']'
 graceful_exit
