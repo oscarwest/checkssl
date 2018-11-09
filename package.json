@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/oscarwest/checkssl#readme",
   "dependencies": {
-    "fastify": "^1.13.0",
-    "shelljs": "^0.8.2"
+    "express": "^4.16.4",
+    "shelljs": "^0.8.2",
+    "valid-url": "^1.0.9"
   }
 }

@@ -1,21 +1,21 @@
 // Require the framework and instantiate it
-const fastify = require('fastify')()
-const shell = require('shelljs');
+let express = require('express');
+const opensslService = require('./opensslService');
+var validUrl = require('valid-url');
 
-// Declare a route
-fastify.get('/', async (request, reply) => {
-  var test = shell.exec('./run.sh');
-  return test.toString();
+let app = express();
+app.use(express.json());
+
+app.post('/status', (req, res) => {
+  var body = req.body;
+  var validUrls = body.filter((value) => {
+    return validUrl.isHttpsUri(value);
+  });
+
+  return res.send(opensslService.getCertInfo(validUrls));
 })
 
-// Run the server!
-const start = async () => {
-  try {
-    await fastify.listen(3000)
-    fastify.log.info(`server listening on ${fastify.server.address().port}`)
-  } catch (err) {
-    fastify.log.error(err)
-    process.exit(1)
-  }
-}
-start()
+
+app.listen(3000, function () {
+  console.log('Listening on 3000!')
+})
