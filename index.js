@@ -1,7 +1,7 @@
 // Require the framework and instantiate it
 let express = require('express');
-const opensslService = require('./opensslService');
-var validUrl = require('valid-url');
+let opensslService = require('./opensslService');
+let validUrl = require('valid-url');
 
 let app = express();
 app.use(express.json());
