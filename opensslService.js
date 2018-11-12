@@ -1,38 +1,33 @@
-const shell = require('shelljs');
+const execAsync = require('./execAsync');
 
 const sslPort = 443;
-const expPattern = /notAfter=(.*)/;
+const expiryPattern = /notAfter=(.*)/;
+const opts = { async: true };
 
-getCertInfoPerUrl = (url) => {
-    let noSchemeUrl = url.replace(/(^\w+:|^)\/\//, '');
-    let exp = shell.exec(`echo | openssl s_client -servername ${noSchemeUrl} -connect ${noSchemeUrl}:${sslPort} 2>/dev/null | openssl x509 -noout -dates 2>/dev/null`);
+getCertInfo = async (urls) => await Promise.all(urls.map(mapUrl));
 
-    if (exp.code === 1) {
-        return {
-            domain: url,
-            expires: null,
-            error: true
-        }
+mapUrl = async (domain) => {
+    const noSchemeUrl = domain.replace(/(^\w+:|^)\/\//, '');
+    const query = `echo | openssl s_client -servername ${noSchemeUrl} -connect ${noSchemeUrl}:${sslPort} 2>/dev/null | openssl x509 -noout -dates 2>/dev/null`;
+
+    let rawCertExpiry;
+
+    try { 
+        rawCertExpiry = await execAsync(query, opts);
+    } catch { 
+        rawCertExpiry = null;
     }
 
-    let expRawString = expPattern.exec(exp.stdout);
-    let expDateObj = new Date(expRawString[1]).toISOString().replace(/:/g, '-')
+    const rawExpiry = rawCertExpiry ? expiryPattern.exec(rawCertExpiry) : undefined;
+    const expiryDate = rawExpiry && rawExpiry.length > 1 ? new Date(rawExpiry[1]).toISOString() : null;
 
-    return {
-        domain: url,
-        expires: expDateObj,
-        error: false
-    };
-}
+    const sslCert = { domain, expiryDate };
 
-getCertInfo = (urls) => {
-    var res = [];
-
-    for (const url of urls) {
-        res.push(getCertInfoPerUrl(url));
+    if(!expiryDate) { 
+        return { ...sslCert, error: "Could not parse expiry date." }; 
     }
 
-    return res;
+    return sslCert;
 }
 
 module.exports = {

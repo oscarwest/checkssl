@@ -1,18 +1,22 @@
-// Require the framework and instantiate it
-let express = require('express');
-let opensslService = require('./opensslService');
-let validUrl = require('valid-url');
+const express = require('express');
+const opensslService = require('./opensslService');
+const validUrl = require('valid-url');
 
-let app = express();
+const app = express();
 app.use(express.json());
 
-app.post('/status', (req, res) => {
-  var body = req.body;
-  var validUrls = body.filter((value) => {
+app.post('/status', async (req, res) => {
+  const body = req.body;
+  const validUrls = body.filter((value) => {
     return validUrl.isHttpsUri(value);
   });
 
-  return res.send(opensslService.getCertInfo(validUrls));
+  const data = await opensslService.getCertInfo(validUrls);
+  return res.send(data);
+})
+
+app.get('/hc', (req, res) => {
+  return res.send('{ "healthy": "true" }');
 })
 
 
