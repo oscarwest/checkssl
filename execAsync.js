@@ -1,5 +1,5 @@
-//const Promise = require('bluebird');
 const sh = require('shelljs');
+
 
 /**
  * Asynchronously executes a shell command and returns a promise that resolves
@@ -28,7 +28,7 @@ function execAsync(cmd, opts={}) {
     // Execute the command, reject if we exit non-zero (i.e. error)
     sh.exec(cmd, opts, function(code, stdout, stderr) {
       if (code != 0) return reject(new Error(stderr));
-      
+
       return resolve(stdout);
     });
   });

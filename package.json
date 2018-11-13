@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
+    "debug": "node --trace-warnings index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,7 +19,6 @@
   },
   "homepage": "https://github.com/oscarwest/checkssl#readme",
   "dependencies": {
-    "bluebird": "^3.5.3",
     "express": "^4.16.4",
     "shelljs": "^0.8.2",
     "valid-url": "^1.0.9"

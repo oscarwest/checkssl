@@ -14,7 +14,10 @@ mapUrl = async (domain) => {
 
     try { 
         rawCertExpiry = await execAsync(query, opts);
-    } catch { 
+    }
+    catch (error)
+    { 
+        console.log(error);
         rawCertExpiry = null;
     }
 
