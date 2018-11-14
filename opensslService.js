@@ -2,7 +2,7 @@ const execAsync = require('./execAsync');
 
 const sslPort = 443;
 const expiryPattern = /notAfter=(.*)/;
-const opts = { async: true };
+// const opts = { async: true };
 
 getCertInfo = async (urls) => await Promise.all(urls.map(mapUrl));
 
@@ -13,10 +13,10 @@ mapUrl = async (domain) => {
     let rawCertExpiry;
 
     try { 
-        rawCertExpiry = await execAsync(query, opts);
+        rawCertExpiry = await execAsync(query);
     }
     catch (error)
-    { 
+    {
         console.log(error);
         rawCertExpiry = null;
     }
@@ -30,7 +30,7 @@ mapUrl = async (domain) => {
         return { ...sslCert, error: "Could not parse expiry date." }; 
     }
 
-    return sslCert;
+    return Promise.resolve(sslCert);
 }
 
 module.exports = {

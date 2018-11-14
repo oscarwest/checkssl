@@ -12,7 +12,7 @@ app.post('/status', async (req, res) => {
   });
 
   const data = await opensslService.getCertInfo(validUrls);
-  return res.send(data);
+  return Promise.resolve(res.send(data));
 })
 
 app.get('/hc', (req, res) => {
