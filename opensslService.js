@@ -30,7 +30,7 @@ mapUrl = async (domain) => {
         return { ...sslCert, error: "Could not parse expiry date." }; 
     }
 
-    return Promise.resolve(sslCert);
+    return sslCert;
 }
 
 module.exports = {
