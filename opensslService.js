@@ -1,3 +1,4 @@
+const sslChecker = require('ssl-checker')
 const execAsync = require('./execAsync');
 
 const sslPort = 443;
@@ -8,29 +9,25 @@ getCertInfo = async (urls) => await Promise.all(urls.map(mapUrl));
 
 mapUrl = async (domain) => {
     const noSchemeUrl = domain.replace(/(^\w+:|^)\/\//, '');
-    const query = `echo | openssl s_client -servername ${noSchemeUrl} -connect ${noSchemeUrl}:${sslPort} 2>/dev/null | openssl x509 -noout -dates 2>/dev/null`;
 
-    let rawCertExpiry;
-
+    let response;
+    
     try { 
-        rawCertExpiry = await execAsync(query);
+        response = await sslChecker(noSchemeUrl);
+        response.domain = domain;
     }
     catch (error)
     {
         console.log(error);
-        rawCertExpiry = null;
+        response = {
+            valid: false,
+            valid_to: "",
+            days_remaining: -1,
+            domain: domain
+        }
     }
 
-    const rawExpiry = rawCertExpiry ? expiryPattern.exec(rawCertExpiry) : undefined;
-    const expiryDate = rawExpiry && rawExpiry.length > 1 ? new Date(rawExpiry[1]).toISOString() : null;
-
-    const sslCert = { domain, expiryDate };
-
-    if(!expiryDate) { 
-        return { ...sslCert, error: "Could not parse expiry date." }; 
-    }
-
-    return sslCert;
+    return response;
 }
 
 module.exports = {
