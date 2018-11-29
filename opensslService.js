@@ -8,6 +8,9 @@ const expiryPattern = /notAfter=(.*)/;
 getCertInfo = async (urls) => await Promise.all(urls.map(mapUrl));
 
 mapUrl = async (domain) => {
+    var startTime = new Date();
+    console.log("[" + startTime + "] Checking domain: " + domain);
+
     const noSchemeUrl = domain.replace(/(^\w+:|^)\/\//, '');
 
     let response;
@@ -26,6 +29,10 @@ mapUrl = async (domain) => {
             domain: domain
         }
     }
+    var endTime = new Date();
+    console.log("[" + endTime + "] Done domain: " + domain);
+    var deltaTime = endTime - startTime;
+    console.log("Duration: " + deltaTime);
 
     return response;
 }
