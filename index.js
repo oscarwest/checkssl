@@ -7,6 +7,8 @@ app.use(express.json());
 
 app.post('/status', async (req, res) => {
   const body = req.body;
+
+  // Filter out invalid urls
   const validUrls = body.filter((value) => {
     return validUrl.isHttpsUri(value);
   });
@@ -17,9 +19,9 @@ app.post('/status', async (req, res) => {
 
 app.get('/hc', (req, res) => {
   return res.send('{ "healthy": "true" }');
-})
+});
 
 
-app.listen(3000, function () {
+app.listen(3001, function () {
   console.log('Listening on 3000!')
-})
+});

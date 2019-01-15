@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oscarwest/checkssl.git"
+    "url": "https://github.com/oscarwest/checkssl.git"
   },
   "author": "",
   "license": "ISC",
@@ -21,7 +21,6 @@
   "dependencies": {
     "express": "^4.16.4",
     "shelljs": "^0.8.2",
-    "ssl-checker": "^1.2.1",
     "valid-url": "^1.0.9"
   }
 }

@@ -1,9 +1,7 @@
-const sslChecker = require('ssl-checker')
-const execAsync = require('./execAsync');
+'use strict';
 
-const sslPort = 443;
-const expiryPattern = /notAfter=(.*)/;
-// const opts = { async: true };
+const sslChecker = require('./nodeSSLChecker')
+
 
 getCertInfo = async (urls) => await Promise.all(urls.map(mapUrl));
 
@@ -29,6 +27,7 @@ mapUrl = async (domain) => {
             domain: domain
         }
     }
+    
     var endTime = new Date();
     console.log("[" + endTime + "] Done domain: " + domain);
     var deltaTime = endTime - startTime;
