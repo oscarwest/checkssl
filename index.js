@@ -1,8 +1,10 @@
 const express = require('express');
 const opensslService = require('./opensslService');
 const validUrl = require('valid-url');
-
 const app = express();
+
+const PORT = process.env.PORT || 3000;
+
 app.use(express.json());
 
 app.post('/status', async (req, res) => {
@@ -22,6 +24,6 @@ app.get('/hc', (req, res) => {
 });
 
 
-app.listen(3001, function () {
-  console.log('Listening on 3000!')
+app.listen(PORT, function () {
+  console.log(`Listening on ${PORT}!`)
 });

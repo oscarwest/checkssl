@@ -49,7 +49,7 @@ module.exports = (host, method, port) => {
             req.on('socket', function (socket) {
                 socket.setTimeout(timeout);
                 socket.on('timeout', function() {
-                    req.abort();
+					req.abort();
                 });
             });
 			req.on('error', e => reject(e));

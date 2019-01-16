@@ -1,11 +1,10 @@
 'use strict';
 
-const sslChecker = require('./nodeSSLChecker')
+const sslChecker = require('./nodeSSLChecker');
 
+let getCertInfo = async (urls) => await Promise.all(urls.map(mapUrl));
 
-getCertInfo = async (urls) => await Promise.all(urls.map(mapUrl));
-
-mapUrl = async (domain) => {
+let mapUrl = async (domain) => {
     var startTime = new Date();
     console.log("[" + startTime + "] Checking domain: " + domain);
 
@@ -27,7 +26,7 @@ mapUrl = async (domain) => {
             domain: domain
         }
     }
-    
+
     var endTime = new Date();
     console.log("[" + endTime + "] Done domain: " + domain);
     var deltaTime = endTime - startTime;
