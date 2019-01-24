@@ -23,7 +23,9 @@ let mapUrl = async (domain) => {
             valid: false,
             valid_to: "",
             days_remaining: -1,
-            domain: domain
+            domain: domain,
+            error: error
+
         }
     }
 
