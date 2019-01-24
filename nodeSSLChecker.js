@@ -20,21 +20,22 @@ module.exports = (host, method, port) => {
 		agent: false,
 	};
 
-    const timeout = 5000;
+	const timeout = 5000;
 	const numericPort = (!isNaN(parseFloat(options.port)) && isFinite(options.port));
 	const daysBetween = (from, to) => Math.round(Math.abs((+from) - (+to))/8.64e7);
 
 	if (numericPort === false) throw new Error("Invalid port");
 
 	if (options.host === null || options.port === null) throw new Error("Invalid host or port");
+
 	return new Promise((resolve, reject) => {
 		try {
 			const req = https.request(options, res => {
 				const { valid_from, valid_to } = res.connection.getPeerCertificate();
-				let days_remaining = daysBetween(new Date(), new Date(valid_to));
+				let now = new Date();
+				let days_remaining = daysBetween(now, new Date(valid_to));
 				
 				// Check if a certificate has already expired
-				let now = new Date();
 				if (new Date(valid_to).getTime() < now.getTime()){
 					days_remaining = -days_remaining;
 				}
@@ -45,17 +46,19 @@ module.exports = (host, method, port) => {
 					valid_to,
 					days_remaining,
 				});
-            });
-            req.on('socket', function (socket) {
-                socket.setTimeout(timeout);
-                socket.on('timeout', function() {
-					req.abort();
-                });
-            });
+			});
+			
+			req.on('socket', function (socket) {
+					socket.setTimeout(timeout);
+					socket.on('timeout', function() {
+						req.abort();
+					});
+			});
 			req.on('error', e => reject(e));
 			req.end();
-		} catch (e) {
+		} 
+		catch (e) {
 			reject(e);
 		}
-	})
+	});
 };

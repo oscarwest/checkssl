@@ -8,7 +8,7 @@ let mapUrl = async (domain) => {
     var startTime = new Date();
     console.log("[" + startTime + "] Checking domain: " + domain);
 
-    const noSchemeUrl = domain.replace(/(^\w+:|^)\/\//, '');
+    const noSchemeUrl = domain.replace(/^(\w+:)\/\//, '');
 
     let response;
     
