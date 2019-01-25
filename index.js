@@ -7,6 +7,10 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+app.get('/hc', (req, res) => {
+  return res.send('{ "healthy": "true" }');
+});
+
 app.post('/status', async (req, res) => {
   const body = req.body;
 
@@ -19,9 +23,6 @@ app.post('/status', async (req, res) => {
   return res.send(data);
 })
 
-app.get('/hc', (req, res) => {
-  return res.send('{ "healthy": "true" }');
-});
 
 
 app.listen(PORT, function () {

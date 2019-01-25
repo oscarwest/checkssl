@@ -6,9 +6,11 @@ let getCertInfo = async (urls) => await Promise.all(urls.map(mapUrl));
 
 let mapUrl = async (domain) => {
     var startTime = new Date();
-    console.log("[" + startTime + "] Checking domain: " + domain);
+    console.log("[" + startTime.toISOString() + "] Checking domain: " + domain);
 
     const noSchemeUrl = domain.replace(/^(\w+:)\/\//, '');
+
+    console.debug(noSchemeUrl);
 
     let response;
     
@@ -25,12 +27,11 @@ let mapUrl = async (domain) => {
             days_remaining: -1,
             domain: domain,
             error: error
-
         }
     }
 
     var endTime = new Date();
-    console.log("[" + endTime + "] Done domain: " + domain);
+    console.log("[" + endTime.toISOString() + "] Done domain: " + domain);
     var deltaTime = endTime - startTime;
     console.log("Duration: " + deltaTime);
 
